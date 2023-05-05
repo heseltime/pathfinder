@@ -63,7 +63,9 @@ public class SearchNodeTest {
 
     SearchNode sn1 = new SearchNode(v1, v2);
     SearchNode sn2 = new SearchNode(v2, v2, sn1, e12);
-
+    //System.out.println("sn2.costsFromStart() " + sn2.costsFromStart());
+    //System.out.println("sn2.estimatedCostsToTarget() " + sn2.estimatedCostsToTarget());
+    //System.out.println("sn2.estimatedTotalCosts() " + sn2.estimatedTotalCosts());
     assertTrue(MathUtil.isDoubleEqual(sn2.costsFromStart() + sn2.estimatedCostsToTarget(),
                                       sn2.estimatedTotalCosts()));
   }
@@ -83,6 +85,9 @@ public class SearchNodeTest {
     SearchNode sn3 = new SearchNode(v3, v3, sn1, e13);
 
     assertTrue(sn2.compareTo(sn3) < 0);
+
+    assertTrue(sn2.compareTo(sn2) == 0);
+    assertTrue(sn3.compareTo(sn2) > 0);
   }
 
   @Test

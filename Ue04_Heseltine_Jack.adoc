@@ -1,0 +1,84 @@
+= SWE4.4: Ue04_Heseltine_Jack
+Jack Heseltine <s2110307016@fh-hagenberg.at>
+v1.0, 04.05.2023
+:toc-title: Inhalt
+:srcdir: ./src
+:icons: font
+:toc: auto
+:imagesdir: .
+:source-highlighter: rouge
+:rouge-style: github
+
+//image::angabe.pdf[pages=1]
+
+[float]
+== Erfüllungsgrad
+
+[cols=">,^,^,^,^,^,>"]
+|====
+| Nr | L   | I   | T   | Summe | Multiplikator  | Punkte
+| a  | 3/3 | 4/4 | 3/3 | 10    | 2              | 20
+| b  | 3/3 | 4/4 | 3/3 | 10    | 3              | 30
+| c  | 0/3 | 0/4 | 0/3 |  0    | 3              |  0
+| d  | 0/3 | 0/4 | 0/3 |  0    | 2              |  0
+6+| Summe Erfüllungsgrad                        | 50
+|====
+
+==== Lösungsidee
+
+===== a)
+
+Für SearchNodes, Member-Variablen state und targetState mit dem Datentyp des entsprechenden Interfaces, predecessor ist vom Typ SearchNode, transition ist Transition.
+
+Getter und Setter werden wie zu erwarten angelegt, costsFromStart arbeitet mit Transition Interface: das Double, das costs() (auf getTransition()) liefert, wird in einer Schleife zum ersten Knoten zurück aufsummiert.
+
+Offen bleibt für mich die Implementierung von setCostsFromStart(), weil Transition keinen Setter anbietet.
+
+===== b)
+
+Die-Solver-Lösungsidee folgt dem in der Angabe verlinkten Wikipedia-Artikel. Dabei wird die openList abgearbeitet, bis entweder eine Lösung gefunden wurde (targetState), oder bis die Liste leer ist, dann wird NoSolutionException geworfen.
+
+closedList (eigentlich Set) dient dabei der Markierung der bereits überprüften SearchNodes.
+
+Die berechneten Kosten werden immer mit tentative_g, einer Vorberechnung für die Nachbarknoten, verglichen:
+
+==== Implementierung
+
+===== a)
+
+[source,c]
+----
+include::{srcdir}/main/swe4/astar/SearchNode.java[]
+----
+
+===== b)
+
+[source,c]
+----
+include::{srcdir}/main/swe4/astar/AStarSolver.java[]
+----
+
+==== Testung
+
+===== a)
+
+V.a. compareTo() wurde erweitert, um alle Fälle abzudecken.
+
+[source,c]
+----
+include::{srcdir}/test/swe4/astar/test/SearchNodeTest.java[]
+----
+
+===== b)
+
+Erweiterungen:
+
+* Ich passe die quadrangle()-Tests an, einmal mit weniger möglichen Lösungen
+* und einmal mit gar keinen Lösungen
+
+Sonst finde ich die Testabdeckung gut, d.h. m.E. kann man nur noch die Komplexität steigern. Anmerkung: ich komme nicht darauf, warum triangleOneSideShorter() nicht durchläuft.
+
+[source,c]
+----
+include::{srcdir}/test/swe4/astar/test/AStarSolverTest.java[]
+----

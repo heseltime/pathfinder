@@ -155,6 +155,54 @@ public class AStarSolverTest {
       fail("NoSolutionException not expected");
     }
   }
+
+  @Test
+  void quadrangleFewerSolutions() {
+    AStarSolver solver = new AStarSolver();
+
+    Vertex v1 = new Vertex(1, 8.0);
+    Vertex v2 = new Vertex(2, 4.0);
+    Vertex v3 = new Vertex(3, 5.0);
+    Vertex v4 = new Vertex(4, 0.0);
+
+    Edge e12 = new Edge(v2, 6.0);
+    v1.addEdge(e12);
+    Edge e13 = new Edge(v3, 4.0);
+    v1.addEdge(e13);
+    Edge e32 = new Edge(v2, 1.0);
+    v3.addEdge(e32);
+    Edge e34 = new Edge(v4, 8.0);
+    v3.addEdge(e34);
+
+    try {
+      List<? extends Transition> transitions = solver.solve(v1, v4);
+      assertEquals(2, transitions.size());
+      assertSame(e13, transitions.get(0));
+      assertSame(e34, transitions.get(1));
+    }
+    catch (NoSolutionException e) {
+      fail("NoSolutionException not expected");
+    }
+  }
+
+  @Test
+  void quadrangleNoSolutions() {
+    AStarSolver solver = new AStarSolver();
+
+    Vertex v1 = new Vertex(1, 8.0);
+    Vertex v2 = new Vertex(2, 4.0);
+    Vertex v3 = new Vertex(3, 5.0);
+    Vertex v4 = new Vertex(4, 0.0);
+
+    Edge e12 = new Edge(v2, 6.0);
+    v1.addEdge(e12);
+    Edge e13 = new Edge(v3, 4.0);
+    v1.addEdge(e13);
+    Edge e32 = new Edge(v2, 1.0);
+    v3.addEdge(e32);
+
+    assertThrows(NoSolutionException.class, () -> solver.solve(v1, v4));
+  }
 }
 
 
